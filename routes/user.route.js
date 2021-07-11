@@ -5,6 +5,9 @@ const user = require('../controllers/user.controller')
 // const auth = require('../middleware/auth')
 
 router.post('/sign-up', user.signUp)
-// router.post('/sign-in', user.signIn)
+router.post('/sign-in', user.signIn)
+router.post('/get-user', user.getUser)
+router.post('/update-user/:id', user.updateUser)
+router.post('/change-password', user.changePassword)
 
 module.exports = router
