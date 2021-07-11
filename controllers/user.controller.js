@@ -8,12 +8,18 @@ exports.signUp = async (req, res) => {
       return res.status(500).send(validation.errorMessage);
     }
 
-    const user = new User({
-      ...req.body,
-    });
+    const data = {
+      fullName: req.body.fullName.trim(),
+      email: req.body.email.trim().toLowerCase(),
+      phone: req.body.phone.trim(),
+      password: req.body.password.trim(),
+    };
+
+    User.find({ $or: [{ email: data.email }, { phone: data.phone }] });
+
+    const user = new User({ ...data });
 
     await user.save();
-
     return res.send(user);
   } catch (e) {
     return res.send(e);
