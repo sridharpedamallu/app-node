@@ -1,21 +1,23 @@
 const User = require("../models/user.model");
 
 exports.signUp = async (req, res) => {
-  const postData = { ...req.body };
+  try {
+    const validation = signUpFormValidation(req, res);
 
-  const validation = signUpFormValidation(req, res);
+    if (validation.error) {
+      return res.status(500).send(validation.errorMessage);
+    }
 
-  if (validation.error) {
-    return res.status(500).send(validation.errorMessage);
+    const user = new User({
+      ...req.body,
+    });
+
+    await user.save();
+
+    return res.send(user);
+  } catch (e) {
+    console.log(e);
   }
-
-  const user = new User({
-    ...postData
-  })
-
-  await user.save()
-
-  return res.send(user);
 };
 
 signUpFormValidation = (req, res) => {
