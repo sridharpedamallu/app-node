@@ -15,7 +15,7 @@ exports.signUp = async (req, res) => {
       password: req.body.password.trim(),
     };
 
-    const userExists = await User.find({ $or: [{ email: data.email }, { phone: data.phone }] });
+    const userExists = await User.findOne({ $or: [{ email: data.email }, { phone: data.phone }] });
 
     if(userExists) {
       return res.status(500).send('User Already exists');
