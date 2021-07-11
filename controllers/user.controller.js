@@ -16,7 +16,7 @@ exports.signUp = async (req, res) => {
 
     return res.send(user);
   } catch (e) {
-    console.log(e);
+    return res.send(e);
   }
 };
 
