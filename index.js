@@ -1,9 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors")
 require("dotenv").config();
 
 const app = express();
+app.use(cors())
 const port = 3000;
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json())
+
+
+const user_routes = require("./routes/user.route")
+
 
 mongoose
   .connect(process.env.DB_URI, {
@@ -21,6 +30,9 @@ mongoose
     console.log(error);
   });
 
+
+app.use("/api/users", user_routes)
+
 app.get("/", (req, res) => {
-  res.send(process.env.DB_URI);
+  res.send('V0.1');
 });
