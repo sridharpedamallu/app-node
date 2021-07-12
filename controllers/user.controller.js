@@ -160,11 +160,12 @@ exports.signUpOTP = async (req, res) => {
       return res.status(404).send('User not found')
     }
 
-    if (!user.emailConfirmed) {
+    if (user.emailConfirmed) {
       return res.status(500).send('Email already confirmed')
     }
 
-    if (user.emailOtp !== req.body.otp) {
+
+    if (user.emailOtp != req.body.otp) {
       return res.status(500).send('Incorrect OTP')
     }
 
