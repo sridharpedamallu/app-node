@@ -11,14 +11,12 @@ exports.signUp = async (req, res) => {
       return res.status(500).send(validateForm.errorMessage);
     }
 
-    const otp = Math.round(Math.random() * 10000000)
-
     const data = {
       fullName: req.body.fullName.trim(),
       email: req.body.email.trim().toLowerCase(),
       phone: req.body.phone.trim(),
       password: encription.encryptPassword(req.body.password.trim()),
-      emailOtp: 111111
+      emailOtp: Math.round(Math.random() * 10000000)
     };
 
     const userExists = await User.findOne({
@@ -166,13 +164,15 @@ exports.signUpOTP = async (req, res) => {
       return res.status(500).send('Email already confirmed')
     }
 
-    // const otp = Math.round(Math.random() * 10000000)
+    if (user.emailOtp !== req.body.otp) {
+      return res.status(500).send('Incorrect OTP')
+    }
+
     user.emailConfirmed = true
-    // user.emailOtp = 111111 //otp
     
     user.save()
 
-    return res.send('OTP Sent')
+    return res.send('OTP Validated successfully')
 
   }catch (e) {
     return res.send('Error occurred')
