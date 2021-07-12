@@ -11,11 +11,14 @@ exports.signUp = async (req, res) => {
       return res.status(500).send(validateForm.errorMessage);
     }
 
+    const otp = Math.round(Math.random() * 10000000)
+
     const data = {
       fullName: req.body.fullName.trim(),
       email: req.body.email.trim().toLowerCase(),
       phone: req.body.phone.trim(),
       password: encription.encryptPassword(req.body.password.trim()),
+      emailOtp: 111111
     };
 
     const userExists = await User.findOne({
@@ -143,4 +146,38 @@ exports.changePassword = async (req, res) => {
   } catch(e) {
     return res.send(e)
   }
+}
+
+exports.signUpOTP = async (req, res) => {
+
+  try{
+
+    if (req.body.email.trim() === "") {
+      return res.status(500).send('Email is required')
+    }
+    
+    const user = await User.findOne({email: req.body.email.trim().toLowerCase()})
+
+    if (!user) {
+      return res.status(404).send('User not found')
+    }
+
+    if (!user.emailConfirmed) {
+      return res.status(500).send('Email already confirmed')
+    }
+
+    // const otp = Math.round(Math.random() * 10000000)
+    user.emailConfirmed = true
+    // user.emailOtp = 111111 //otp
+    
+    user.save()
+
+    return res.send('OTP Sent')
+
+  }catch (e) {
+    return res.send('Error occurred')
+    console.log(e)
+  }
+
+
 }

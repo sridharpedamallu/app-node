@@ -20,10 +20,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    emailconfirmed: {
+    emailConfirmed: {
       type: Boolean,
       default: false,
       required: true,
+    },
+    emailOtp: {
+      type: Number
     },
   },
   { timestamps: true }
